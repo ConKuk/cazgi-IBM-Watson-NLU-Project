@@ -116,7 +116,6 @@ app.get("/text/sentiment", (req,res) => {
       }
     })
     .then(analysisResults => {
-      console.log(analysisResults);
 
       if (analysisResults.result.entities[0]) {
         let response = analysisResults.result.entities[0].sentiment.label;
