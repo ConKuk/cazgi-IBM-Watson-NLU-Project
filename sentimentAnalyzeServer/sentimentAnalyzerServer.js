@@ -34,21 +34,33 @@ app.get("/url/emotion", (req,res) => {
 
     getNLUInstance().analyze({
         url: req.query.url,
-        features:{
-          entities:{
-            emotion: true
-          }
-        }
+        'features': {
+          'entities': {
+            'emotion': true,
+            'sentiment': true,
+            'limit': 2,
+          },
+          'keywords': {
+            'emotion': true,
+            'sentiment': true,
+            'limit': 2,
+          },
+        },
       })
       .then(analysisResults => {
-        let result = analysisResults.result.entities[0].emotion;
+        if (analysisResults.result.keywords[0]) {
+
+          let result = analysisResults.result.keywords[0].emotion;
         let emotions = [];
         for (let emot in result){
           if (result.hasOwnProperty(emot)){
             emotions.push({type: emot, value: result[emot]});
           }
         }
-        res.send(JSON.stringify(emotions, null, 2))
+          return res.send(JSON.stringify(emotions, null, 2))
+        }
+        res.send("No results");
+
       })
       .catch(err => {
           console.log('error:', err);
@@ -59,16 +71,27 @@ app.get("/url/emotion", (req,res) => {
 app.get("/url/sentiment", (req,res) => {
   getNLUInstance().analyze({
       url: req.query.url,
-      features:{
-        entities:{
-          sentiment: true
-        }
-      }
+      'features': {
+        'entities': {
+          'emotion': true,
+          'sentiment': true,
+          'limit': 2,
+        },
+        'keywords': {
+          'emotion': true,
+          'sentiment': true,
+          'limit': 2,
+        },
+      },
     })
     .then(analysisResults => {
-      let response = analysisResults.result.entities[0].sentiment.label;
+      if (analysisResults.result.keywords[0]){
+        let response = analysisResults.result.keywords[0].sentiment.label;
+        return res.send(response);
+      }
+      res.send("No results");
 
-      res.send(response);
+
     })
     .catch(err => {
       console.log('error:', err);
@@ -81,15 +104,22 @@ app.get("/url/sentiment", (req,res) => {
 app.get("/text/emotion", (req,res) => {
   getNLUInstance().analyze({
       text: req.query.text,
-      features:{
-        entities:{
-          emotion: true
-        }
-      }
+      'features': {
+        'entities': {
+          'emotion': true,
+          'sentiment': true,
+          'limit': 2,
+        },
+        'keywords': {
+          'emotion': true,
+          'sentiment': true,
+          'limit': 2,
+        },
+      },
     })
     .then(analysisResults => {
-      if (analysisResults.result.entities[0]) {
-        let result = analysisResults.result.entities[0].emotion;
+      if (analysisResults.result.keywords[0]) {
+        let result = analysisResults.result.keywords[0].emotion;
         let emotions = [];
         for (let emot in result) {
           if (result.hasOwnProperty(emot)) {
@@ -109,15 +139,22 @@ app.get("/text/emotion", (req,res) => {
 app.get("/text/sentiment", (req,res) => {
   getNLUInstance().analyze({
       text: req.query.text,
-      features:{
-        entities:{
-          sentiment: true
-        }
-      }
+      'features': {
+        'entities': {
+          'emotion': true,
+          'sentiment': true,
+          'limit': 2,
+        },
+        'keywords': {
+          'emotion': true,
+          'sentiment': true,
+          'limit': 2,
+        },
+      },
     })
     .then(analysisResults => {
 
-      if (analysisResults.result.entities[0]) {
+      if (analysisResults.result.keywords[0]) {
         let response = analysisResults.result.entities[0].sentiment.label;
         return res.send(response);
       }
